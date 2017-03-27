@@ -1,25 +1,10 @@
 const Discord = require("discord.js");
 const bot = new Discord.Client();
-const secrets = require("./secrets.json");
+const secrets = require("./lib/secrets.json");
+const commands = require("./lib/commands.js").commands;
 
 var token = secrets.token;
 var prefix = secrets.prefix;
-
-
-var commands = {
-  "commandname": {
-    func: function (message, args) {
-      message.channel.sendMessage("command/channel reply");
-    }
-
-  },
-  "hi": {
-    func: function (message, args) {
-      message.channel.sendMessage("Heyo You're Gayo!");
-    }
-  }
-
-};
 
 
 bot.on("message", function (message) {
