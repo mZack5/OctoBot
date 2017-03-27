@@ -8,13 +8,15 @@ var prefix = secrets.prefix;
 
 
 bot.on("message", function (message) {
-  if (message.content.indexOf(prefix) === 0) {
-    var messageArray = message.content.slice(1).split(" ");
-    var cmd = commands[messageArray.shift()];
-    if (cmd !== undefined) {
-      cmd.func(message, messageArray);
-    } else {
-      message.channel.sendMessage("Unknown command my dude");
+  if (message.author.bot === false) {
+    if (message.content.indexOf(prefix) === 0) {
+      var messageArray = message.content.slice(1).split(" ");
+      var cmd = commands[messageArray.shift()];
+      if (cmd !== undefined) {
+        cmd.func(message, messageArray);
+      } else {
+        message.channel.sendMessage("Unknown command! Type !Commands for a list of commands!");
+      }
     }
   }
 });
