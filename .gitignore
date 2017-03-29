@@ -1,6 +1,7 @@
 # Personal Files
-secrets.json
+config.json
 scratch.txt
+
 # Logs
 logs
 *.log
