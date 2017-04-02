@@ -2,11 +2,10 @@ const Discord = require("discord.js");
 const bot = new Discord.Client();
 const config = require("./lib/config.json");
 const commands = require("./lib/commands.js").commands;
-//const request = require('request');
+const request = require('request');
 
 var token = config.discord_token;
 var prefix = config.prefix;
-
 
 bot.on("ready", () => {
       bot.user.setGame("Dank Memes"); 
