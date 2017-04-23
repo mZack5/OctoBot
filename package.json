@@ -1,7 +1,7 @@
 {
   "name": "octobot",
   "version": "1.0.0",
-  "description": "A Discord Bot I Made",
+  "description": "A Discord Bot For Interacting With OctoPrint Written Using Node.js",
   "main": "index.js",
   "dependencies": {
     "discord.js": "^11.0.0",
@@ -11,9 +11,8 @@
     "nodemon": "^1.11.0"
   },
   "scripts": {
-    "test": "node test.js",
     "start": "node index.js"
   },
-  "author": "mZach",
-  "license": "ISC"
+  "author": "Zachary Zodkoy",
+  "license": "MIT"
 }
