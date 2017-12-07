@@ -1,6 +1,7 @@
 # Personal Files
 config.json
 scratch.*
+node_modules
 
 # Logs
 logs
