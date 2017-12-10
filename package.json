@@ -1,10 +1,11 @@
 {
   "name": "octobot",
-  "version": "1.0.0",
-  "description": "A Discord Bot For Interacting With OctoPrint Written Using Node.js",
+  "version": "0.0.1",
+  "description": "Personal discord bot",
   "main": "index.js",
   "dependencies": {
-    "discord.js": "^11.2.1",
+    "discord.js": "*",
+    "fs": "0.0.1-security",
     "request": "*"
   },
   "devDependencies": {
