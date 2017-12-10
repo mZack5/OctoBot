@@ -1,18 +1,22 @@
 "use strict";
-const Discord = require("discord.js");
+const Discord = require('discord.js');
 const bot = new Discord.Client();
-const config = require("./lib/config.json");
-const commands = require("./lib/commands.js").commands;
+const commands = require('./lib/commands.js').commands;
+const fs = require('fs');
+
+
+let config = JSON.parse(fs.readFileSync('./lib/config.json'));
+
 
 let token = config.discord_token;
 let prefix = config.prefix;
 
-bot.on("ready", () => {
+bot.on("ready", function botReady() {
   let game = config.game;
   bot.user.setGame(game);
 });
 
-bot.on("message", function (message) {
+bot.on("message", function messageRecived(message) {
   if (message.author.bot === false) {
     if (message.content.indexOf(prefix) === 0) {
       let messageArguments = message.cleanContent.toLowerCase().slice(1).split(" ");
