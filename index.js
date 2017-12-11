@@ -4,12 +4,9 @@ const bot = new Discord.Client();
 const commands = require('./lib/commands.js').commands;
 const fs = require('fs');
 
-
 let config = JSON.parse(fs.readFileSync('./lib/config.json'));
-
-
 let token = config.discord_token;
-let prefix = config.prefix;
+bot.prefix = config.prefix;
 
 bot.on("ready", function botReady() {
   let game = config.game;
@@ -18,18 +15,17 @@ bot.on("ready", function botReady() {
 
 bot.on("message", function messageRecived(message) {
   if (message.author.bot === false) {
-    if (message.content.indexOf(prefix) === 0) {
+    if (message.content.indexOf(bot.prefix) === 0) {
       let messageArguments = message.cleanContent.toLowerCase().slice(1).split(" ");
       let func = commands[messageArguments.shift()];
       let command = message.cleanContent.slice(1).split(" ").shift().toLowerCase();
       if (func !== undefined) {
-        func.process(message, messageArguments, command);
+        func.process(message, messageArguments, command, bot);
       } else if (command.length > 0) {
         message.channel.send('Unknown command! Type ' + prefix + 'Commands for a list of commands!');
       }
     }
   }
 });
-
 
 bot.login(token);
