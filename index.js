@@ -22,6 +22,8 @@ bot.on("message", function messageRecived(message) {
       let command = message.cleanContent.slice(bot.prefix.length).split(" ").shift().toLowerCase();
       if (func !== undefined) {
         func.process(message, messageArguments, command, bot);
+      } else if (command == 'commands') {
+        message.channel.send(Object.getOwnPropertyNames(commands));
       } else if (command.length > 0) {
         message.channel.send('Unknown command! Type ' + bot.prefix + 'Commands for a list of commands!');
       }
