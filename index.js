@@ -29,7 +29,7 @@ bot.on("message", function messageRecived(message) {
         message.channel.send(`Unknown command! Type ${bot.prefix}commands for a list of commands`);
       }
         } else if (command == 'prefix') {
-      message.channel.send(`My prefix is currently ${bot.prefix}`);
+     // message.channel.send(`My prefix is currently ${bot.prefix}`);
     }
   }
 });
