@@ -1,8 +1,0 @@
-{
-    "discord_token":"SOME_LONG_STRING",
-    "prefix":"!",
-    "octo_token":"SOME_OTHER_LONG_STRING",
-    "base_url":"http://192.168.1.1XX",
-    "game":"Hello World!",
-    "repo":"https://github.com/example/example"
-}
