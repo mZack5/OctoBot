@@ -1,7 +1,7 @@
 "use strict";
 const Discord = require('discord.js');
 const bot = new Discord.Client();
-// const commands = require('./lib/commands.js').commands;
+const Music = require('discord.js-musicbot-addon');
 const fs = require('fs');
 
 let config = JSON.parse(fs.readFileSync('./config.json'));
@@ -11,14 +11,13 @@ bot.commands = new Discord.Collection;
 
 fs.readdir('./lib/', (err, files) => {
   if (err) console.error(err);
-  let jsfiles = files.filter(f => f.split('.').pop() === 'js');
-  if (jsfiles.length <= 0) {
+  let command_files = files.filter(f => f.split('.').pop() === 'js');
+  if (command_files.length <= 0) {
     console.log('somethings wrong bud');
     return;
-  }
-  console.log(`loading ${jsfiles.length} commands`);
+  } else console.log(`loading ${command_files.length} commands`);
 
-  jsfiles.forEach((f, i) => {
+  command_files.forEach((f, i) => {
     let props = require(`./lib/${f}`);
     bot.commands.set(props.help.name, props);
   });
@@ -41,8 +40,14 @@ bot.on("message", function messageRecived(message) {
 
   if (message.content.startsWith(bot.prefix)) {
     if (func) {
-      console.log(`messageArguemnts is ${messageArguments}`);
       func.run(message, messageArguments, command, bot);
+    } else if (command == 'commands') {
+      let cmd_names = [];
+      bot.commands.forEach((objects, names) => {
+        // console.log(names);
+        cmd_names.push(names);
+      });
+     message.channel.send(cmd_names);
     }
     // else if here to list commands
     // else if here to say unknown command
@@ -50,4 +55,10 @@ bot.on("message", function messageRecived(message) {
     message.channel.send(`My prefix is currently ${bot.prefix}`);
   }
 });
+
+
+const music = new Music(bot, {
+  youtubeKey: 'AIzaSyAW7nDn7vaWBX6jlLEoTyyo7meiQZKYUjI'
+});
+
 bot.login(token);
