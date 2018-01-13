@@ -5,7 +5,6 @@
   "main": "index.js",
   "dependencies": {
     "discord.js": "*",
-    "discord.js-musicbot-addon": "^1.8.2",
     "ffmpeg-binaries": "^3.2.2-3",
     "fs": "0.0.1-security",
     "node-opus": "^0.2.7",
