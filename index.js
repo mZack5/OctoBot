@@ -6,9 +6,22 @@ const Music = require('./lib/src/discord-music');
 const fs = require('fs');
 
 let config = JSON.parse(fs.readFileSync('./config.json'));
-let tokens = JSON.parse(fs.readFileSync('./tokens.json'));
 
-let token = tokens.discord_token;
+try {
+  let tokens = JSON.parse(fs.readFileSync('./tokens.json'));
+  let discord_token = tokens.discord_token;
+  let youtube_token = tokens.youtube_token;    
+} catch (error) {
+  // if we get to here, the code is (hopefully)
+  // running on heroku, so we need to account for that
+  let discord_token = process.env.discord_token;
+  let youtube_token = process.env.youtube_token;
+  // this should hopefully be everything we need right now
+  // octotoken is broken but we dont talk about that
+}
+
+
+
 
 bot.prefix = config.prefix;
 bot.commands = new Discord.Collection;
@@ -62,7 +75,7 @@ bot.on("message", function messageRecived(message) {
 
 
 const music = new Music(bot, {
-  youtubeKey: tokens.youtube_token,
+  youtubeKey: youtube_token,
   botOwner: config.bot_owner,
   prefix: bot.prefix,      
   global: false,         //TODO: Change well bot is running!
@@ -78,4 +91,4 @@ const music = new Music(bot, {
   helloWorld: false
 });
 
-bot.login(token);
+bot.login(discord_token);
