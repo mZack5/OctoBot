@@ -1,12 +1,15 @@
 "use strict";
 const Discord = require('discord.js');
 const bot = new Discord.Client();
+
 const Music = require('./lib/src/discord-music');
-//const Music = require('discord.js-musicbot-addon');
 const fs = require('fs');
 
 let config = JSON.parse(fs.readFileSync('./config.json'));
-let token = config.discord_token;
+let tokens = JSON.parse(fs.readFileSync('./tokens.json'));
+
+let token = tokens.discord_token;
+
 bot.prefix = config.prefix;
 bot.commands = new Discord.Collection;
 
@@ -59,7 +62,7 @@ bot.on("message", function messageRecived(message) {
 
 
 const music = new Music(bot, {
-  youtubeKey: config.youtube_token,
+  youtubeKey: tokens.youtube_token,
   botOwner: config.bot_owner,
   prefix: bot.prefix,      
   global: false,         //TODO: Change well bot is running!
@@ -72,7 +75,7 @@ const music = new Music(bot, {
   disableLoop: true,
   anyoneCanSkip: false,
   ownerOverMember: true,
-  helloWorld: true
+  helloWorld: false
 });
 
 bot.login(token);
