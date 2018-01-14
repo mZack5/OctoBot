@@ -3,6 +3,7 @@ config.json
 scratch.*
 todo.md
 scratch
+
 # Logs
 logs
 *.log
