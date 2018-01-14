@@ -1,13 +1,33 @@
 "use strict";
 const Discord = require('discord.js');
 const bot = new Discord.Client();
+const express = require('express');
+const app = express();
+
 const Music = require('./lib/src/discord-music');
 const fs = require('fs');
-
+const port = process.env.PORT || 5000;
 let config = JSON.parse(fs.readFileSync('./config.json'));
 
 bot.prefix = config.prefix;
 bot.commands = new Discord.Collection;
+
+// set the view engine to ejs
+app.set('view engine', 'ejs');
+
+// make express look in the `public` directory for assets (css/js/img)
+app.use(express.static(__dirname + '/public'));
+
+// set the home page route
+app.get('/', (request, response) => {
+    // ejs render automatically looks in the views folder
+    response.render('index');
+});
+
+app.listen(port, () => {
+  // will echo 'Our app is running on http://localhost:5000 when run locally'
+  console.log('Our app is running on http://localhost:' + port);
+});
 
 fs.readdir('./lib/', (err, files) => {
   if (err) console.error(err);
@@ -72,5 +92,9 @@ const music = new Music(bot, {
   ownerOverMember: true,
   helloWorld: false
 });
+
+setInterval(() => {
+  http.get('http://secure-taiga-35645.herokuapp.com');
+}, 900000);
 
 bot.login(process.env.discordtoken);
