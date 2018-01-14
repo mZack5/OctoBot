@@ -27,11 +27,6 @@ fs.readdir('./lib/', (err, files) => {
 bot.on("ready", function botReady() {
   console.log('im ready');
   bot.user.setGame(config.game);
-  console.log(`
-  process.env.discordtoken is ${process.env.discordtoken}
-  \n\
-  process.env.youtubetoken is ${process.env.youtubetoken}  
-  `)
 });
 
 bot.on("message", function messageRecived(message) {
