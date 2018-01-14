@@ -20,7 +20,13 @@ try {
   // octotoken is broken but we dont talk about that
 }
 
+// console.log(`
 
+// process.env.discord_token is ${process.env.discord_token}
+// \n\
+// process.env.youtube_token is ${process.env.youtube_token}
+// \n\
+// `);
 
 
 bot.prefix = config.prefix;
