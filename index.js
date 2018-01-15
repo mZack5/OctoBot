@@ -95,7 +95,7 @@ const music = new Music(bot, {
 });
 
 setInterval(() => {
-  http.get('http://secure-taiga-35645.herokuapp.com');
+  http.get('http://fuck-zach.herokuapp.com');
 }, 900000);
 
 bot.login(process.env.discordtoken);
