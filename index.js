@@ -1,6 +1,7 @@
 "use strict";
 const Discord = require('discord.js');
 const bot = new Discord.Client();
+const path = require("path");
 const express = require('express');
 const app = express();
 
@@ -13,7 +14,7 @@ bot.prefix = config.prefix;
 bot.commands = new Discord.Collection;
 
 // set the view engine to ejs
-app.set('view engine', 'ejs');
+//app.set('view engine', 'ejs');
 
 // make express look in the `public` directory for assets (css/js/img)
 app.use(express.static(__dirname + '/public'));
@@ -21,7 +22,7 @@ app.use(express.static(__dirname + '/public'));
 // set the home page route
 app.get('/', (request, response) => {
     // ejs render automatically looks in the views folder
-    response.render('index');
+    response.sendFile(path.join(__dirname+'/views/index.html'));
 });
 
 app.listen(port, () => {
