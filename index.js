@@ -40,17 +40,12 @@ fs.readdir('./lib/', (err, files) => {
 
 bot.on("ready", function botReady() {
   console.log('im ready');
-  // Changed from setGame to setActivity in recent updates
-  // of discord.js, which now returns a promise. 
-  // this breaking change needs to be handled.
-  //bot.user.setGame(config.game);
-
   // This should send a call to /lib/game.js
   // this shouldnt be its own call. 
 
-  bot.user.setActivity('Little Anime Girls', {
-    url: "https://www.twitch.tv/eleaguetv",
-    type: "WATCHING"
+  bot.user.setActivity(config.game, {
+    url: config.url,
+    type: config.game_state
   });
 });
 
