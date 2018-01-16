@@ -1,4 +1,5 @@
 "use strict";
+//require('dotenv').config();
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 const path = require("path");
@@ -9,24 +10,16 @@ const Music = require('./lib/src/discord-music');
 const fs = require('fs');
 const port = process.env.PORT || 5000;
 let config = JSON.parse(fs.readFileSync('./config.json'));
+const http = require("http");
 
 bot.prefix = config.prefix;
 bot.commands = new Discord.Collection;
 
-// set the view engine to ejs
-//app.set('view engine', 'ejs');
-
-// make express look in the `public` directory for assets (css/js/img)
 app.use(express.static(__dirname + '/public'));
-
-// set the home page route
 app.get('/', (request, response) => {
-    // ejs render automatically looks in the views folder
-    response.sendFile(path.join(__dirname+'/views/index.html'));
+  response.sendFile(path.join(__dirname + '/views/index.html'));
 });
-
 app.listen(port, () => {
-  // will echo 'Our app is running on http://localhost:5000 when run locally'
   console.log('Our app is running on http://localhost:' + port);
 });
 
@@ -47,13 +40,26 @@ fs.readdir('./lib/', (err, files) => {
 
 bot.on("ready", function botReady() {
   console.log('im ready');
-  bot.user.setGame(config.game);
+  // Changed from setGame to setActivity in recent updates
+  // of discord.js, which now returns a promise. 
+  // this breaking change needs to be handled.
+  //bot.user.setGame(config.game);
+
+  // This should send a call to /lib/game.js
+  // this shouldnt be its own call. 
+
+  bot.user.setActivity('Little Anime Girls', {
+    url: "https://www.twitch.tv/eleaguetv",
+    type: "WATCHING"
+  });
 });
 
 bot.on("message", function messageRecived(message) {
   if (message.author.bot === true) return;
-  if (message.channel.type !== 'text') return message.channel.send('fuck outta my DMs boi');
-
+  if (message.channel.type !== 'text' &&
+    message.author.id !== config.bot_owner) {
+    return message.channel.send('fuck outta my DMs boi');
+  }
   let messageArguments = message.content.slice(bot.prefix.length).split(" ");
   messageArguments.shift();
   let command = message.content.slice(bot.prefix.length).split(" ").shift();
@@ -65,13 +71,12 @@ bot.on("message", function messageRecived(message) {
     } else if (command == 'commands') {
       let cmd_names = [];
       bot.commands.forEach((objects, names) => {
-        // console.log(names);
         cmd_names.push(names);
       });
-     message.channel.send(cmd_names);
+      message.channel.send(cmd_names);
+    } else if (config.unknown_command_message == "true") {
+      message.channel.send("Unknown command!")
     }
-    // else if here to list commands
-    // else if here to say unknown command
   } else if (command == 'prefix') {
     message.channel.send(`My prefix is currently ${bot.prefix}`);
   }
@@ -80,7 +85,7 @@ bot.on("message", function messageRecived(message) {
 const music = new Music(bot, {
   youtubeKey: process.env.youtubetoken,
   botOwner: config.bot_owner,
-  prefix: bot.prefix,      
+  prefix: bot.prefix,
   global: false,         //TODO: Change well bot is running!
   maxQueueSize: 25,
   clearInvoker: true,

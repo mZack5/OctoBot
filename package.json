@@ -8,8 +8,8 @@
     "npm": "5.6.0"
   },
   "dependencies": {
-    "body-parser": "^1.18.2",
     "discord.js": "*",
+    "dotenv": "^4.0.0",
     "express": "^4.16.2",
     "ffmpeg-binaries": "^3.2.2-3",
     "fs": "0.0.1-security",

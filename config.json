@@ -1,7 +1,9 @@
 {
   "base_url": "http://192.168.1.100",
-  "game": "dont @ me hoe",
+  "game": "not shit",
+  "game_state": "WATCHING",
   "prefix": "-",
   "repo": "https://github.com/mZack5/OctoBot",
+  "unknown_command_message":"false",
   "bot_owner": "185513703364362240"
 }
