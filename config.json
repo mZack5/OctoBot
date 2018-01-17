@@ -1,11 +1,11 @@
 {
   "base_url": "http://192.168.1.100",
-  "game": "hello world",
-  "game_state": "STREAMING",
+  "game": "nenesd",
+  "game_state": "LISTENING",
   "game_url": "null",
   "prefix": "-",
   "repo": "https://github.com/mZack5/OctoBot",
   "unknown_command_message": "false",
   "bot_owner": "185513703364362240",
-  "url": "http://twitch.tv/monstercat"
+  "url": ""
 }
