@@ -63,13 +63,15 @@ bot.on("message", function messageRecived(message) {
   if (message.content.startsWith(bot.prefix)) {
     if (func) {
       func.run(message, messageArguments, command, bot);
-    } else if (command == 'commands') {
-      let cmd_names = [];
-      bot.commands.forEach((objects, names) => {
-        cmd_names.push(names);
-      });
-      message.channel.send(cmd_names);
-    } else if (config.unknown_command_message == "true") {
+    }
+    //else if (command == 'commands') {
+    //   let cmd_names = [];
+    //   bot.commands.forEach((objects, names) => {
+    //     cmd_names.push(names);
+    //   });
+    //   message.channel.send(cmd_names);
+    // } 
+    else if (config.unknown_command_message == "true") {
       message.channel.send("Unknown command!")
     }
   } else if (command == 'prefix') {
