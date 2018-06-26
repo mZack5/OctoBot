@@ -92,7 +92,9 @@ const music = new Music(bot, {
   disableLoop: true,
   anyoneCanSkip: false,
   ownerOverMember: true,
-  enableQueueStat: true
+  enableQueueStat: true,
+  anyoneCanAdjust: false,
+  logging: false, 
 });
 
 setInterval(() => {
