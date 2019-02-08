@@ -4,12 +4,13 @@
   "description": "Personal discord bot",
   "main": "index.js",
   "engines": {
-    "node": "9.2.0",
+    "node": "*",
     "yarn": "*"
   },
   "dependencies": {
     "digitalocean": "^1.0.0",
     "discord.js": "*",
+    "dotenv": "^6.2.0",
     "express": "^4.16.2",
     "ffmpeg-binaries": "^3.2.2-3",
     "fs": "0.0.1-security",
