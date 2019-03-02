@@ -60,23 +60,18 @@ bot.on("message", function messageRecived(message) {
   let messageArguments = message.content.slice(bot.prefix.length).split(" ");
   messageArguments.shift();
   let command = message.content.slice(bot.prefix.length).split(" ").shift();
-  let func = bot.commands.get(command);
+  let cmdfunction = bot.commands.get(command);
 
   if (message.content.startsWith(bot.prefix)) {
-    if (func) {
-      func.run(message, messageArguments, command, bot);
-    }
-    //else if (command == 'commands') {
-    //   let cmd_names = [];
-    //   bot.commands.forEach((objects, names) => {
-    //     cmd_names.push(names);
-    //   });
-    //   message.channel.send(cmd_names);
-    // } 
-    else if (config.unknown_command_message == "true") {
+    if (cmdfunction) {
+      cmdfunction.run(message, messageArguments, command, bot);
+    } else if (config.unknown_command_message == "true") {
       message.channel.send("Unknown command!")
     }
   } else if (command == 'prefix') {
+    // this words because when checking for a function
+    // the first letter is removed, meaning things 
+    // like aprefix or @prefix also work
     message.channel.send(`My prefix is currently ${bot.prefix}`);
   }
 });
@@ -86,16 +81,31 @@ bot.on("message", function messageRecived(message) {
 setInterval(() => {
   http.get('http://fuck-zach.herokuapp.com');
 }, 900000);
-// this setInterval will be the core of the tiktokPinger script
-// it will run every 3 minutes to check if theres new videos from a channel
 
 
-let test1 = 0;
+// this is to check if X tiktoker has uploaded, and send a discord
+// message as an alert
+
+// this function should:
+/**
+ * have an init function in bot.on(ready) which updates 
+ * when booting, so reboots dont always invoke an alert
+ * 
+ * work with multiple tiktokers, should work with however many
+ * tiktokers are listed in a json config file
+ * 
+ * check the last videoid of X tiktokers upload, and not the number
+ * of videos they have. Using video numbers can sometimes return a 
+ * false positive
+ * 
+ */
+
 setInterval(() => {
-  test1++;
   tiktokpinger.checkIfNewVideos(bot);
-  console.log(test1);
 }, 180000);
+
+
+
 
 bot.login(process.env.discordtoken);
 
@@ -105,9 +115,9 @@ bot.login(process.env.discordtoken);
 
 
 
-    // google disabled my api key so uh, lets just disable the music bot
+// google disabled my api key so uh, lets just disable the music bot
 
-    //const Music = require('./lib/src/discord-music');
+//const Music = require('./lib/src/discord-music');
 /*
 const music = new Music(bot, {
   youtubeKey: process.env.youtubetoken,
