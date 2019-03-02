@@ -91,18 +91,11 @@ setInterval(() => {
  * have an init function in bot.on(ready) which updates 
  * when booting, so reboots dont always invoke an alert
  * 
- * work with multiple tiktokers, should work with however many
- * tiktokers are listed in a json config file
- * 
- * check the last videoid of X tiktokers upload, and not the number
- * of videos they have. Using video numbers can sometimes return a 
- * false positive
- * 
  */
 
 setInterval(() => {
   tiktokpinger.checkIfNewVideos(bot);
-}, 180000);
+}, 10000);
 
 
 
