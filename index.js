@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 const bot = new Discord.Client();
 const path = require("path");
 const express = require('express');
+const schedule = require('node-schedule');
 const app = express();
 
 const fs = require('fs');
@@ -93,9 +94,17 @@ setInterval(() => {
  * 
  */
 
-setInterval(() => {
+let job = schedule.scheduleJob({minute: 30}, function () {
   tiktokpinger.checkIfNewVideos(bot);
-}, 10000);
+});
+let job2 = schedule.scheduleJob({minute: 58}, function () {
+  tiktokpinger.checkIfNewVideos(bot);
+});
+
+// this is to tell my friend to brush his teeth
+let job3 = schedule.scheduleJob({hour: 20, minute: 5}, function () {
+  bot.channels.get('381974359843012613').send(`<@139465047704469504> Brush your teeth RIGHT the fuck now.`);
+});
 
 
 
