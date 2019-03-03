@@ -110,7 +110,8 @@ let job3 = schedule.scheduleJob({
   hour: 20,
   minute: 5
 }, function () {
-  bot.channels.get('381974359843012613').send(`<@139465047704469504> Brush your teeth RIGHT the fuck now.`);
+  let teeth = JSON.parse(fs.readFileSync('./lib/src/teeth.json'));
+  bot.channels.get('381974359843012613').send(`<@139465047704469504> ${teeth.brush[Math.floor(Math.random() * Math.floor(teeth.brush.length))]}`);
 });
 
 
