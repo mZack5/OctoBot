@@ -94,15 +94,22 @@ setInterval(() => {
  * 
  */
 
-let job = schedule.scheduleJob({minute: 30}, function () {
+let job = schedule.scheduleJob({
+  minute: 30
+}, function () {
   tiktokpinger.checkIfNewVideos(bot);
 });
-let job2 = schedule.scheduleJob({minute: 58}, function () {
+let job2 = schedule.scheduleJob({
+  minute: 58
+}, function () {
   tiktokpinger.checkIfNewVideos(bot);
 });
 
 // this is to tell my friend to brush his teeth
-let job3 = schedule.scheduleJob({hour: 20, minute: 5}, function () {
+let job3 = schedule.scheduleJob({
+  hour: 20,
+  minute: 5
+}, function () {
   bot.channels.get('381974359843012613').send(`<@139465047704469504> Brush your teeth RIGHT the fuck now.`);
 });
 
