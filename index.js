@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 const Discord = require('discord.js');
 const bot = new Discord.Client();
-const path = require("path");
+const path = require('path');
 const express = require('express');
 const schedule = require('node-schedule');
 const app = express();
@@ -11,7 +11,7 @@ require('dotenv').config();
 const tiktokpinger = require('./lib/src/tiktokPinger');
 const port = process.env.PORT || 5000;
 let config = JSON.parse(fs.readFileSync('./config.json'));
-const http = require("http");
+const http = require('http');
 
 bot.prefix = config.prefix;
 bot.commands = new Discord.Collection;
@@ -39,8 +39,8 @@ fs.readdir('./lib/', (err, files) => {
 });
 
 
-bot.on("ready", function botReady() {
-  console.log('im ready');
+bot.on('ready', function botReady() {
+  console.log('Im back in the land of the living');
   // This should send a call to /lib/game.js
   // this shouldnt be its own call. 
   // but im lazy
@@ -52,29 +52,36 @@ bot.on("ready", function botReady() {
   });
 });
 
-bot.on("message", function messageRecived(message) {
+bot.on('message', function messageRecived(message) {
   if (message.author.bot === true) return;
   if (message.channel.type !== 'text' &&
     message.author.id !== config.bot_owner) {
     return message.channel.send('fuck outta my DMs boi');
   }
-  let messageArguments = message.content.slice(bot.prefix.length).split(" ");
+  let messageArguments = message.content.slice(bot.prefix.length).split(' ');
   messageArguments.shift();
-  let command = message.content.slice(bot.prefix.length).split(" ").shift();
+  let command = message.content.slice(bot.prefix.length).split(' ').shift();
   let cmdfunction = bot.commands.get(command);
 
   if (message.content.startsWith(bot.prefix)) {
     if (cmdfunction) {
       cmdfunction.run(message, messageArguments, command, bot);
-    } else if (config.unknown_command_message == "true") {
-      message.channel.send("Unknown command!")
+    } else if (config.unknown_command_message == 'true') {
+      message.channel.send('Unknown command!')
     }
   } else if (command == 'prefix') {
     // this words because when checking for a function
     // the first letter is removed, meaning things 
     // like aprefix or @prefix also work
+
+    // TODO: make this not work based on len of prefix, 
+    // so !prefix actually works likes its supposed too
     message.channel.send(`My prefix is currently ${bot.prefix}`);
   }
+});
+
+bot.on('error', (error) => {
+  console.error(`Shit\'ts broken fam ${error}`);
 });
 
 
@@ -118,33 +125,3 @@ let job3 = schedule.scheduleJob({
 
 
 bot.login(process.env.discordtoken);
-
-
-
-
-
-
-
-// google disabled my api key so uh, lets just disable the music bot
-
-//const Music = require('./lib/src/discord-music');
-/*
-const music = new Music(bot, {
-  youtubeKey: process.env.youtubetoken,
-botOwner: config.bot_owner,
-prefix: bot.prefix,
-global: false,         //TODO: Change well bot is running!
-maxQueueSize: 25,
-clearInvoker: true,
-helpCmd: 'musichelp',
-playCmd: 'play',
-volumeCmd: 'vol',
-leaveCmd: 'stop',
-disableLoop: true,
-anyoneCanSkip: false,
-ownerOverMember: true,
-enableQueueStat: true,
-anyoneCanAdjust: false,
-logging: false,
-});
-*/
