@@ -114,7 +114,7 @@ let job2 = schedule.scheduleJob({
 
 // this is to tell my friend to brush his teeth
 let job3 = schedule.scheduleJob({
-  hour: 20,
+  hour: 18,
   minute: 5
 }, function () {
   let teeth = JSON.parse(fs.readFileSync('./lib/src/teeth.json'));
