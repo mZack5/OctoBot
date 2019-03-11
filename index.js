@@ -39,10 +39,14 @@ fs.readdir('./lib/', (err, files) => {
 
 bot.on('ready', function botReady() {
   console.log('Im back in the land of the living');
+
+  // this is to update tiktokers.json on reboot
+  // using info from a discord message  
+  tiktokpinger.importTikTokers(bot);
+
   // This should send a call to /lib/game.js
   // this shouldnt be its own call. 
   // but im lazy
-
   bot.user.setActivity(config.game, {
     url: config.url,
     type: config.game_state
