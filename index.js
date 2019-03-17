@@ -81,11 +81,12 @@ bot.on('message', function messageRecived(message) {
     message.channel.send(`My prefix is currently ${bot.prefix}`);
   }
 });
-
+// disable this so all errors will return a strack trace to herokus logs
+/*
 bot.on('error', (error) => {
-  console.error(`Shit\'ts broken fam ${error}`);
+  console.error(`Shit\'ts broken fam ${error}}`);
 });
-
+*/
 
 // this stops heroku from disabling my dynamo from no traffic
 setInterval(() => {
