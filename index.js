@@ -99,7 +99,7 @@ setInterval(() => {
   }).catch((err) => {
     console.log('this isnt supposed to happen')
   });
-}, 9000000);
+}, 900000);
 
 // auto updater
 cron.schedule('30,58 * * * *', function () {
