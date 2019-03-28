@@ -2,9 +2,9 @@
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 
-const schedule = require('node-schedule');
+const cron = require('node-cron');
 const fs = require('fs');
-const request = require('request');
+const request = require('request-promise-native');
 const tiktokpinger = require('./lib/src/tiktokPinger');
 
 const express = require('express');
@@ -21,6 +21,7 @@ app.use(express.static(__dirname + '/public'));
 app.get('/', (request, response) => {
   response.sendFile(path.join(__dirname + '/views/index.html'));
 });
+
 app.listen(port, () => {
   console.log('Our app is running on http://localhost:' + port);
 });
@@ -81,34 +82,32 @@ bot.on('message', function messageRecived(message) {
     message.channel.send(`My prefix is currently ${bot.prefix}`);
   }
 });
-// disable this so all errors will return a strack trace to herokus logs
-/*
+
 bot.on('error', (error) => {
-  console.error(`Shit\'ts broken fam ${error}}`);
+  setTimeout(() => {
+    tiktokpinger.checkIfNewVideos();
+  }, 45000)
+  console.error(`Something went wrong... \n\r ${error}}`);
 });
-*/
+
 
 // this stops heroku from disabling my dynamo from no traffic
 setInterval(() => {
-  request.get('http://fuck-zach.herokuapp.com');
-}, 900000);
+  console.log('we boutta do it');
+  request({
+    uri: 'http://fuck-zach.herokuapp.com',
+  }).catch((err) => {
+    console.log('this isnt supposed to happen')
+  });
+}, 9000000);
 
-let job = schedule.scheduleJob({
-  minute: 30
-}, function () {
-  tiktokpinger.checkIfNewVideos(bot);
-});
-let job2 = schedule.scheduleJob({
-  minute: 58
-}, function () {
+// auto updater
+cron.schedule('30,58 * * * *', function () {
   tiktokpinger.checkIfNewVideos(bot);
 });
 
 // this is to tell my friend to brush his teeth
-let job3 = schedule.scheduleJob({
-  hour: 18,
-  minute: 5
-}, function () {
+cron.schedule('5 18 * * *', function () {
   let teeth = JSON.parse(fs.readFileSync('./lib/src/teeth.json'));
   bot.channels.get('381974359843012613').send(`<@139465047704469504> ${teeth.brush[Math.floor(Math.random() * Math.floor(teeth.brush.length))]}`);
 });
