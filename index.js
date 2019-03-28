@@ -5,7 +5,7 @@ const bot = new Discord.Client();
 const cron = require('node-cron');
 const fs = require('fs');
 const request = require('request-promise-native');
-const tiktokpinger = require('./lib/src/tiktokPinger');
+const tiktokpinger = require('./lib/tools/tiktokPinger');
 
 const express = require('express');
 const path = require('path');
@@ -108,7 +108,7 @@ cron.schedule('30,58 * * * *', function () {
 
 // this is to tell my friend to brush his teeth
 cron.schedule('5 18 * * *', function () {
-  let teeth = JSON.parse(fs.readFileSync('./lib/src/teeth.json'));
+  let teeth = JSON.parse(fs.readFileSync('./lib/tools/teeth.json'));
   bot.channels.get('381974359843012613').send(`<@139465047704469504> ${teeth.brush[Math.floor(Math.random() * Math.floor(teeth.brush.length))]}`);
 });
 
