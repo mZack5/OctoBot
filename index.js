@@ -6,6 +6,7 @@ const cron = require('node-cron');
 const fs = require('fs');
 const request = require('request-promise-native');
 const tiktokpinger = require('./lib/tools/tiktokPinger');
+const configLoader = require('./lib/tools/configLoader');
 
 const express = require('express');
 const path = require('path');
@@ -13,8 +14,6 @@ const app = express();
 
 require('dotenv').config();
 const port = process.env.PORT || 5000;
-let config = JSON.parse(fs.readFileSync('./config.json'));
-bot.prefix = config.prefix;
 
 
 app.use(express.static(__dirname + '/public'));
@@ -23,7 +22,7 @@ app.get('/', (request, response) => {
 });
 
 app.listen(port, () => {
-  console.log('Our app is running on http://localhost:' + port);
+  console.log('Program Starting');
 });
 
 bot.commands = new Discord.Collection;
@@ -39,20 +38,24 @@ fs.readdir('./lib/', (err, files) => {
 
 
 bot.on('ready', function botReady() {
-  console.log('Im back in the land of the living');
+  console.log('Discord Client ready');
 
-  // this is to update tiktokers.json on reboot
+  // this is to update tiktokers.json and config.json on reboot
   // using info from a discord message  
   tiktokpinger.importTikTokers(bot);
+  configLoader.importConfig(bot).then(() => {
+    let config = JSON.parse(fs.readFileSync('./config.json'));
+    bot.prefix = config.prefix;
+    bot.unknown_command_message = config.unknown_command_message;
 
-  // This should send a call to /lib/game.js
-  // this shouldnt be its own call. 
-  // but im lazy
-  bot.user.setActivity(config.game, {
-    url: config.url,
-    type: config.game_state
+    bot.user.setActivity(config.game, {
+      url: config.game_url,
+      type: config.game_state
 
-  });
+    });
+
+  })
+
 });
 
 bot.on('message', function messageRecived(message) {
