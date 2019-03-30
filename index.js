@@ -93,11 +93,10 @@ bot.on('error', (error) => {
 
 // this stops heroku from disabling my dynamo from no traffic
 setInterval(() => {
-  console.log('we boutta do it');
   request({
     uri: 'http://fuck-zach.herokuapp.com',
   }).catch((err) => {
-    console.log('this isnt supposed to happen')
+    console.log('this isnt supposed to happen');
   });
 }, 900000);
 
