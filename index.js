@@ -73,7 +73,7 @@ bot.on('message', function messageRecived(message) {
   if (message.content.startsWith(bot.prefix)) {
     if (cmdfunction) {
       cmdfunction.run(message, messageArguments, command, bot);
-    } else if (config.unknown_command_message == 'true') {
+    } else if (bot.unknown_command_message == 'true') {
       message.channel.send('Unknown command!')
     }
   } else if (command == 'prefix') {
