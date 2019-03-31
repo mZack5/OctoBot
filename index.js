@@ -31,11 +31,15 @@ fs.readdir('./lib/', (err, files) => {
   // this line only selects .js files, and adds them to command_files
   let command_files = files.filter(f => f.includes('.js'));
   for (let cmd of command_files) {
-    let props = require(`./lib/${cmd}`)
-    bot.commands.set(props.help.name, props);
+    let props = require(`./lib/${cmd}`);
+    try {
+      bot.commands.set(props.help.name, props);
+    } catch (error) {
+      console.log(`Error adding commands, file doesnt have name or help properties`);
+      process.exit(1);
+    }
   }
 });
-
 
 bot.on('ready', function botReady() {
   console.log('Discord Client ready');
@@ -51,11 +55,8 @@ bot.on('ready', function botReady() {
     bot.user.setActivity(config.game, {
       url: config.game_url,
       type: config.game_state
-
     });
-
-  })
-
+  });
 });
 
 bot.on('message', function messageRecived(message) {
