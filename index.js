@@ -6,6 +6,7 @@ const cron = require('node-cron');
 const fs = require('fs');
 const request = require('request-promise-native');
 const tiktokpinger = require('./lib/tools/tiktokPinger');
+const checkIfLive = require('./lib/tools/checkIfLive');
 const configLoader = require('./lib/tools/configLoader');
 
 const express = require('express');
@@ -104,11 +105,15 @@ setInterval(() => {
   });
 }, 900000);
 
-// auto updater
+// auto updater for new posts, checks 2 times an hour
 cron.schedule('30,58 * * * *', function () {
   tiktokpinger.checkIfNewVideos(bot);
 });
 
+// auto updater for if someone is live, checks every 5 minutes
+cron.schedule('*/5 * * * *', function () {
+  checkIfLive.checkIfLive(bot);
+});
 // this is to tell my friend to brush his teeth
 cron.schedule('5 18 * * *', function () {
   let teeth = JSON.parse(fs.readFileSync('./lib/tools/teeth.json'));
