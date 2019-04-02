@@ -92,7 +92,7 @@ bot.on('error', (error) => {
   setTimeout(() => {
     tiktokpinger.checkIfNewVideos();
   }, 45000)
-  console.error(`Something went wrong... \n\r ${error}}`);
+  console.error(`Something went wrong... \n\r ${JSON.stringify(error, null, 2)}}`);
 });
 
 
