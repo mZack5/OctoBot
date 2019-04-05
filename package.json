@@ -4,7 +4,7 @@
   "description": "Personal discord bot",
   "main": "index.js",
   "engines": {
-    "node": "*",
+    "node": "^11.13.0",
     "yarn": "*"
   },
   "dependencies": {
