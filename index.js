@@ -120,8 +120,9 @@ cron.schedule('30,58 * * * *', function () {
 
 // auto updater for if someone is live, checks every 5 minutes
 cron.schedule('*/5 * * * *', function () {
-    //checkIfLive.checkIfLive(bot);
+    checkIfLive.checkIfLive(bot);
 });
+
 // this is to tell my friend to brush his teeth
 cron.schedule('5 18 * * *', function () {
     let teeth = JSON.parse(fs.readFileSync('./lib/tools/teeth.json'));
