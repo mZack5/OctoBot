@@ -53,11 +53,11 @@ bot.on('ready', async () => {
         console.log(`Fatal Error! \n${error}`);
         process.exit();
     }
-
     let config = JSON.parse(fs.readFileSync('./config.json'));
+    
     bot.prefix = config.prefix;
     bot.unknown_command_message = config.unknown_command_message;
-
+    bot.owner_id = config.bot_owner;
     bot.user.setActivity(config.game, {
         url: config.game_url,
         type: config.game_state
@@ -67,7 +67,7 @@ bot.on('ready', async () => {
 bot.on('message', async (message) => {
     if (message.author.bot === true) return;
     if (message.channel.type !== 'text' &&
-        message.author.id !== config.bot_owner) {
+        message.author.id !== bot.bot_owner) {
         return message.channel.send('fuck outta my DMs boi');
     }
     let messageArguments = message.content.slice(bot.prefix.length).split(' ');
