@@ -8,6 +8,7 @@ test1.txt
 tiktokers.json
 config.json
 test_files
+.vscode
 
 # Logs
 logs
