@@ -5,8 +5,7 @@ const bot = new Discord.Client();
 const cron = require('node-cron');
 const fs = require('fs');
 const request = require('request-promise-native');
-const tiktokpinger = require('./lib/tools/tiktokPinger');
-const checkIfLive = require('./lib/tools/checkIfLive');
+const ttPinger = require('./lib/tools/ttPinger');
 const fileLoader = require('./lib/tools/fileLoader');
 
 const express = require('express');
@@ -54,7 +53,7 @@ bot.on('ready', async () => {
         process.exit();
     }
     let config = JSON.parse(fs.readFileSync('./config.json'));
-    
+
     bot.prefix = config.prefix;
     bot.unknown_command_message = config.unknown_command_message;
     bot.owner_id = config.bot_owner;
@@ -115,12 +114,12 @@ setInterval(() => {
 
 // auto updater for new posts, checks 2 times an hour
 cron.schedule('30,58 * * * *', function () {
-    tiktokpinger.checkIfNewVideos(bot);
+    ttPinger.checkIfNewVideos(bot);
 });
 
 // auto updater for if someone is live, checks every 5 minutes
 cron.schedule('*/5 * * * *', function () {
-    checkIfLive.checkIfLive(bot);
+    ttPinger.checkIfLive(bot);
 });
 
 // this is to tell my friend to brush his teeth
