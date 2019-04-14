@@ -49,7 +49,7 @@ bot.on('ready', async () => {
         await fileLoader.importFile(bot, 'config.json');
         await fileLoader.importFile(bot, 'tiktokers.json');
     } catch (error) {
-        console.log(`Fatal Error! \n${error}`);
+        console.log(`Error! Error importing boot files! \n${error}`);
         process.exit();
     }
     let config = JSON.parse(fs.readFileSync('./config.json'));
