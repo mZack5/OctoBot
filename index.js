@@ -99,10 +99,14 @@ bot.on('error', async (error) => {
 });
 
 process.on('SIGINT', () => {
-    console.log("aught interrupt signal");
+    console.log('aught interrupt signal');
     process.exit();
 });
-
+process.on('SIGTERM', async () => {
+    console.log('Goodbye!');
+    //await fileLoader.exportFile(bot, 'tiktokers.json')
+    process.exit();
+});
 // this stops heroku from disabling my dynamo from no traffic
 setInterval(() => {
     request({
