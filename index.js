@@ -115,17 +115,17 @@ setInterval(() => {
     });
 }, 900000);
 
-// this is to tell my friend to brush his teeth 381974359843012613
+// this is to tell my friend to brush his teeth 
 cron.schedule('5 18 * * *', async () => {
     const teeth = JSON.parse(fs.readFileSync('./teeth.json'));
     // first we should delete the old message
-    await bot.channels.get('262283539469434912').fetchMessage(teeth.teeth_msg)
+    await bot.channels.get('381974359843012613').fetchMessage(teeth.teeth_msg)
         .then(msg => {
             msg.delete();
         });
 
     // then we should send a new message
-    bot.channels.get('262283539469434912').send(`<@139465047704469504> ${teeth.brush[Math.floor(Math.random() * Math.floor(teeth.brush.length))]}`).then(msg => {
+    bot.channels.get('381974359843012613').send(`<@139465047704469504> ${teeth.brush[Math.floor(Math.random() * Math.floor(teeth.brush.length))]}`).then(msg => {
         teeth.teeth_msg = msg.id;
         fs.writeFileSync('teeth.json', JSON.stringify(teeth, null, 2));
         fileLoader.exportFile(bot, 'teeth.json');
