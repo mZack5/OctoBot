@@ -5,7 +5,6 @@ const bot = new Discord.Client();
 const cron = require('node-cron');
 const fs = require('fs');
 const request = require('request-promise-native');
-const ttPinger = require('./lib/tools/ttPinger');
 const fileLoader = require('./lib/tools/fileLoader');
 
 const express = require('express');
@@ -47,7 +46,6 @@ bot.on('ready', async () => {
 
     try {
         await fileLoader.importFile(bot, 'config.json');
-        await fileLoader.importFile(bot, 'tiktokers.json');
     } catch (error) {
         console.log(`Error! Error importing boot files! \n${error}`);
         process.exit();
@@ -115,16 +113,6 @@ setInterval(() => {
         console.log('this isnt supposed to happen');
     });
 }, 900000);
-
-// auto updater for new posts, checks 2 times an hour
-cron.schedule('30,58 * * * *', function () {
-    ttPinger.checkIfNewVideos(bot);
-});
-
-// auto updater for if someone is live, checks every 5 minutes
-cron.schedule('*/5 * * * *', function () {
-    ttPinger.checkIfLive(bot);
-});
 
 // this is to tell my friend to brush his teeth
 cron.schedule('5 18 * * *', function () {
