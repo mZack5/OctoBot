@@ -10,6 +10,7 @@ config.json
 test_files
 .vscode
 teeth.json
+digitaldb.json
 
 # Logs
 logs
