@@ -9,11 +9,10 @@
   },
   "dependencies": {
     "discord.js": "^11.4.2",
+    "do-wrapper": "^3.20.0",
     "dotenv": "^6.2.0",
     "express": "^4.16.2",
-    "json-bigint": "^0.3.0",
     "node-cron": "^2.0.3",
-    "randomcolor": "^0.5.4",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7"
   },
