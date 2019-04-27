@@ -1,0 +1,8 @@
+{
+  "droplet": {
+    "id": 123,
+    "name": "asdf",
+    "msg_id": "123",
+    "msg_chan": "123"
+  }
+}
