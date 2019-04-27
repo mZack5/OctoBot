@@ -91,10 +91,7 @@ bot.on('message', async (message) => {
 });
 
 bot.on('error', async (error) => {
-    setTimeout(() => {
-        tiktokpinger.checkIfNewVideos();
-    }, 45000)
-    console.error(`Something went wrong... \n\r ${JSON.stringify(error, null, 2)}}`);
+    console.error(`Something went wrong... ${JSON.stringify(error, null, 2)}`);
 });
 
 process.on('SIGINT', () => {
