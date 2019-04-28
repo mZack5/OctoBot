@@ -47,6 +47,7 @@ bot.on('ready', async () => {
     try {
         await fileLoader.importFile(bot, 'config.json');
         await fileLoader.importFile(bot, 'teeth.json');
+        await fileLoader.importFile(bot, 'digitaldb.json');
     } catch (error) {
         console.log(`Error! Error importing boot files! \n${error}`);
         process.exit();
