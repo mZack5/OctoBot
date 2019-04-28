@@ -95,6 +95,9 @@ bot.on('error', async (error) => {
     console.error(`Something went wrong... ${JSON.stringify(error, null, 2)}`);
 });
 
+process.on('unhandledRejection', error => {
+    console.log('unhandledRejection', error.message);
+});
 process.on('SIGINT', () => {
     console.log('aught interrupt signal');
     process.exit();
