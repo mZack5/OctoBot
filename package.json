@@ -8,6 +8,7 @@
     "yarn": "*"
   },
   "dependencies": {
+    "cloudflare": "^2.4.1",
     "discord.js": "^11.4.2",
     "do-wrapper": "^3.20.0",
     "dotenv": "^6.2.0",
