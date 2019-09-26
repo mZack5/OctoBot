@@ -97,7 +97,7 @@ async function mainStart(message: Message, botConfig: ConfigOptions): Promise<vo
       await sleep(2000);
    } while (!ip);
    await updateCloudflare(ip);
-   await msg.edit('Droplet created! Please use ```minecraft.zodkoy.com``` to connect.');
+   await msg.edit('Droplet created! Please use ```mc.zodkoy.com``` to connect.');
 }
 
 // this function should:
