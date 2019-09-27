@@ -1,9 +1,6 @@
 import { Message } from 'discord.js';
 import Rcon from 'rcon-ts';
-import {
-   readFileSync, existsSync, closeSync,
-   openSync, unlinkSync, writeFileSync,
-} from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import {
    ConfigOptions, DropletOptions, Zone,
    DnsResult,
@@ -250,24 +247,10 @@ export default async (message: Message, args: string[]): Promise<void> => {
 
    switch (args[0].toLowerCase()) {
       case 'start':
-         if (existsSync('./digital.lock')) {
-            message.channel.send('Error! Lockfile found, did you just run the stop command?');
-            return;
-         }
          mainStart(message, config);
          break;
 
       case 'stop':
-         if (!existsSync('./digital.lock')) {
-            message.channel.send(`Command locked, please run this command again to verify you have: 
-         1: ran the command /save-all
-         2: ran the command /backup start
-         3: ran the command /stop`);
-            closeSync(openSync('./digital.lock', 'a'));
-            return;
-         }
-         // delete the lockfile
-         unlinkSync('./digital.lock');
          await mainStop(message, config);
          break;
 
