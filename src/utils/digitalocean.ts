@@ -82,6 +82,10 @@ class DigitalOcean {
    public deleteDroplet(dropletId: number): Promise<void> {
       return this.sendDelete(`droplets/${dropletId}`);
    }
+
+   public getDropletAction(actionId: number): Promise<DropletAction> {
+      return this.getJSON(`actions/${actionId}`);
+   }
 }
 
 export const dOcean = new DigitalOcean();

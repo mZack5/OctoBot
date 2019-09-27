@@ -133,7 +133,7 @@ async function mainStop(message: Message, botConfig: ConfigOptions): Promise<voi
    } while (timesCheckedStatus > 0);
 
    // send a snapshot command
-   await dOcean.runDropletAction(botConfig.droplet.id, 'snapshot');
+   const snapshotAction = await dOcean.runDropletAction(botConfig.droplet.id, 'snapshot');
    msg.edit('Droplet has been shutdown and a snapshot was started! Please give this a few minutes to complete.');
 
    let timesCheckedSnap = 0;
@@ -142,17 +142,37 @@ async function mainStop(message: Message, botConfig: ConfigOptions): Promise<voi
       // eslint-disable-next-line no-await-in-loop
       await sleep(15000);
       // eslint-disable-next-line no-await-in-loop
-      const { droplet } = await dOcean.getDropletById(botConfig.droplet.id);
-      console.log(`getDropletByID: status\n\n${JSON.stringify(droplet, null, 2)}`);
-      if (droplet.snapshot_ids.length) break;
+      const { action } = await dOcean.getDropletAction(snapshotAction.action.id);
+      console.log(`getDropletAction: action(in-loop):\n\n${JSON.stringify(action, null, 2)}`);
+      if (action.status === 'completed') break;
       timesCheckedSnap += 1;
       msg.edit(`Droplet has been shutdown and a snapshot was started! Please give this a few minutes to complete. Checked ${timesCheckedSnap} times`);
    } while (timesCheckedSnap > 0);
 
    msg.edit('Droplet Snapshot finished! I\'m gonna check a few things before I delete the server.');
 
-   await dOcean.deleteDroplet(botConfig.droplet.id);
-   msg.edit(`Droplet Deleted! It took ${timesCheckedStatus * 2} Seconds to shutdown the server, and ${((timesCheckedSnap * 15) / 60)} Minutes to take a snapshot.`);
+   const status = await dOcean.getDropletById(botConfig.droplet.id);
+   if (status.droplet.snapshot_ids.length) {
+      await dOcean.deleteDroplet(botConfig.droplet.id);
+      msg.edit(`Droplet Deleted! It took ${timesCheckedStatus * 2} Seconds to shutdown the server, and ${((timesCheckedSnap * 15) / 60)} Minutes to take a snapshot.`);
+   } else {
+      msg.edit('Error! Droplet returned snapshot finished but returned no snapshot_ids, Doing nothing and aborting.');
+   }
+}
+
+async function dropletGetIp(message: Message, config: ConfigOptions): Promise<string | void> {
+   const { droplets } = await dOcean.getAllDroplets();
+   if (droplets.length !== 1) {
+      const errMessage = (droplets.length > 1) ? 'Error! Multple Dropets Running!' : 'Error! No Droplets are running!';
+      message.channel.send(errMessage);
+      return;
+   }
+   if (!config.droplet.id) {
+      message.channel.send('Droplet ID not found in database :thinking:');
+      return;
+   }
+   const status = await dOcean.getDropletById(config.droplet.id);
+   message.channel.send(`Current IP Address \`\`\`${status.droplet.networks.v4[0].ip_address}\`\`\` `)
 }
 
 export default async (message: Message, args: string[]): Promise<void> => {
@@ -199,7 +219,7 @@ export default async (message: Message, args: string[]): Promise<void> => {
          break;
 
       case 'ip':
-         message.channel.send('Command Not Ported Yet');
+         await dropletGetIp(message, config);
          break;
 
       default:
