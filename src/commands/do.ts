@@ -1,4 +1,5 @@
 import { Message } from 'discord.js';
+import Rcon from 'rcon-ts';
 import {
    readFileSync, existsSync, closeSync,
    openSync, unlinkSync, writeFileSync,
@@ -17,6 +18,16 @@ function sleep(timeMs: number): Promise<void> {
    return new Promise(resolve => {
       setTimeout(resolve, timeMs);
    });
+}
+
+async function checkRconConnection(rClient: Rcon): Promise<boolean> {
+   try {
+      await rClient.connect();
+      const isServerReachable = await rClient.send('/help');
+      return !!(isServerReachable);
+   } catch (e) {
+      return false;
+   }
 }
 
 function createDOConfig(snapshotId: string): DropletOptions {
@@ -106,7 +117,15 @@ async function mainStart(message: Message, botConfig: ConfigOptions): Promise<vo
 // - snapshot the droplet
 // - delete the droplet only when we are 100% sure it has been snapshotted
 async function mainStop(message: Message, botConfig: ConfigOptions): Promise<void> {
+   const mcServer = new Rcon({
+      host: 'mc.zodkoy.com',
+      port: 25595,
+      password: process.env.rconToken as string,
+      timeout: 5000,
+   });
+
    const msg = await message.channel.send('Shutting down the server!') as Message;
+   await sleep(500);
    const { droplets } = await dOcean.getAllDroplets();
    console.log(`getAllDroplets: Droplets\n${JSON.stringify(droplets, null, 2)}`);
 
@@ -115,6 +134,40 @@ async function mainStop(message: Message, botConfig: ConfigOptions): Promise<voi
       msg.edit('Error! No droplets are currently running.');
       return;
    }
+
+   if (!checkRconConnection(mcServer)) {
+      logger.warn('tried and failed to make an rcon connection to a server.');
+      msg.edit(`Error! <@${process.env.botOwner}> An RCON connection couldnt be made to the server. The server might be down, or have crashed. You can try running this command again in a few minutes, or manually run the commands: \`/save-all\`, \`/backup start\`, \`/stop\` and then running this command with OVERRIDE after \`stop\``);
+      return;
+   }
+
+   if (!message.cleanContent.includes('OVERRIDE')) {
+      msg.edit('Successfully established rcon connection to server!');
+      if (!message.cleanContent.includes('fuckyou')) {
+         const anyPlayersOnline = await mcServer.send('/list');
+         if (anyPlayersOnline.length > 33) {
+            msg.edit('Error! Someone is still playing on the server! Add `fuckyou` after `stop` to stop the server anyway.');
+            return;
+         }
+      }
+      const doSaveAll = await mcServer.send('/save-all');
+      await sleep(500);
+      if (!doSaveAll) {
+         msg.edit('Error! RCON returned no info after sending command: `/save-all`');
+         return;
+      }
+      const stop = await mcServer.send('/stop');
+      if (!stop) {
+         msg.edit('Error! RCON returned no info after sending command: `/save-all`');
+      }
+      msg.edit('Minecraft server stopping!');
+      // yeah just sleeping isnt that good, but we ghetto now.
+      await sleep(10000);
+   } else {
+      msg.edit('Warn: OVERRIDE Option used! Skpping using RCON to gracefully exit minecraft');
+      await sleep(2000);
+   }
+
    // send a shutdown command
    await dOcean.runDropletAction(botConfig.droplet.id, 'shutdown');
 
@@ -220,6 +273,10 @@ export default async (message: Message, args: string[]): Promise<void> => {
 
       case 'ip':
          await dropletGetIp(message, config);
+         break;
+
+      case 'whosonline':
+         message.channel.send('Zach you dump fuck get this working.');
          break;
 
       default:
