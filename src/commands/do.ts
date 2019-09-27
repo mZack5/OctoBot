@@ -41,10 +41,8 @@ function createDOConfig(snapshotId: string): DropletOptions {
 
 async function updateCloudflare(ip: string): Promise<boolean> {
    const zones = await cFlare.getAllZones();
-   console.log(`getAllZones: zones\n${JSON.stringify(zones, null, 2)}`);
    const { id } = zones.result.find(name => name.name === 'zodkoy.com') as Zone;
    const allDnsRecords = await cFlare.getDnsForZone(id);
-   console.log(`getDnsForZone: allDnsRecords\n${JSON.stringify(allDnsRecords, null, 2)}`);
    const mcRecord = allDnsRecords.result.find(name => name.name === 'mc.zodkoy.com') as DnsResult;
    const newRecord = {
       type: 'A',
@@ -53,7 +51,6 @@ async function updateCloudflare(ip: string): Promise<boolean> {
       ttl: 120,
    };
    const response = await cFlare.updateDnsZone(id, mcRecord.id, newRecord);
-   console.log(`updateDnsZone: Response\n${JSON.stringify(response, null, 2)}`);
    return response.success;
 }
 
@@ -63,7 +60,6 @@ async function updateCloudflare(ip: string): Promise<boolean> {
 // - start a droplet using that snapshot
 async function mainStart(message: Message, botConfig: ConfigOptions): Promise<void> {
    const config = botConfig;
-   console.log(`Config:\n${JSON.stringify(config, null, 2)}`);
    const msg = await message.channel.send('Searching for the latest snapshot') as Message;
 
    config.droplet.messageId = msg.id;
@@ -72,7 +68,6 @@ async function mainStart(message: Message, botConfig: ConfigOptions): Promise<vo
    exportFile(`${process.env.configFile}.json`);
 
    const { droplets } = await dOcean.getAllDroplets();
-   console.log(`getAllDroplets: Droplets\n${JSON.stringify(droplets, null, 2)}`);
    // droplets is an array of all existing droplets, empty if none exist
    if (droplets.length !== 0) {
       await msg.edit('Error! There\'s already a droplet running!');
@@ -80,13 +75,11 @@ async function mainStart(message: Message, botConfig: ConfigOptions): Promise<vo
    }
 
    const { snapshots } = await dOcean.getSnapshots();
-   console.log(`getSnapshots: snapshots: \n${JSON.stringify(snapshots, null, 2)}`);
    const latestSnapshot = snapshots.pop() as Snapshot;
    await msg.edit(`Latest snapshot found! Creating server! Snapshot size: ${latestSnapshot.size_gigabytes} GB`);
    const dropletConfig = createDOConfig(latestSnapshot.id);
 
    const newDroplet = await dOcean.createDroplet(dropletConfig);
-   console.log(`createDroplet: newDroplet: \n${JSON.stringify(newDroplet, null, 2)}`);
    config.droplet.id = newDroplet.droplet.id;
    config.droplet.name = newDroplet.droplet.name;
    writeFileSync(`${process.env.configFile}.json`, JSON.stringify(config, null, 2));
@@ -96,7 +89,6 @@ async function mainStart(message: Message, botConfig: ConfigOptions): Promise<vo
    do {
       // eslint-disable-next-line no-await-in-loop
       const { droplet } = await dOcean.getDropletById(config.droplet.id);
-      console.log(`getDropletByID: droplet\n\n${JSON.stringify(droplet, null, 2)}`);
       if (droplet.networks.v4.length) {
          ip = droplet.networks.v4[0].ip_address;
          break;
@@ -124,7 +116,6 @@ async function mainStop(message: Message, botConfig: ConfigOptions): Promise<voi
    const msg = await message.channel.send('Shutting down the server!') as Message;
    await sleep(500);
    const { droplets } = await dOcean.getAllDroplets();
-   console.log(`getAllDroplets: Droplets\n${JSON.stringify(droplets, null, 2)}`);
 
    // this checks for running droplets
    if (droplets.length !== 1) {
@@ -174,7 +165,6 @@ async function mainStop(message: Message, botConfig: ConfigOptions): Promise<voi
       await sleep(2000);
       // eslint-disable-next-line no-await-in-loop
       const { droplet } = await dOcean.getDropletById(botConfig.droplet.id);
-      console.log(`getDropletByID: droplet\n\n${JSON.stringify(droplet, null, 2)}`);
       if (droplet.status === 'off') break;
       timesCheckedStatus += 1;
       if (timesCheckedStatus % 2 === 0) {
@@ -193,7 +183,6 @@ async function mainStop(message: Message, botConfig: ConfigOptions): Promise<voi
       await sleep(15000);
       // eslint-disable-next-line no-await-in-loop
       const { action } = await dOcean.getDropletAction(snapshotAction.action.id);
-      console.log(`getDropletAction: action(in-loop):\n\n${JSON.stringify(action, null, 2)}`);
       if (action.status === 'completed') break;
       timesCheckedSnap += 1;
       msg.edit(`Droplet has been shutdown and a snapshot was started! Please give this a few minutes to complete. Checked ${timesCheckedSnap} times`);
