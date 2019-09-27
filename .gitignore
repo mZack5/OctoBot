@@ -11,6 +11,8 @@ test_files
 .vscode
 teeth.json
 digitaldb.json
+dist/
+workspace.code-workspace
 
 # Logs
 logs
