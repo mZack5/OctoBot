@@ -16,7 +16,7 @@ export function startTimers(): void {
    if (process.env.NODE_ENV === 'production') {
       // ping our dyno every 15 minutes so heroku doesnt murder it
       herokuPing = setInterval((): void => {
-         http.get('http://catbitchbot.herokuapp.com');
+         http.get('https://botty-boi.herokuapp.com/');
       }, 900000);
    }
 }
